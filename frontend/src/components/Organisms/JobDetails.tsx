@@ -9,7 +9,7 @@ import { JobCard } from "@/components/molecules/JobCard";
 export function JobDetails() {
   const { jobId } = useParams<{ jobId: string }>();
   const { getJobById } = useJobStore();
-  const [job, setJob] = useState<IJob | null>(null);
+  const [job, setJob] = useState<IJob | undefined>(undefined);
 
   useEffect(() => {
     const getJobDetails = async () => {

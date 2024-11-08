@@ -12,8 +12,8 @@ export const createJob = async (): Promise<string> => {
     status: JobStatus.PENDING,
   };
   jobs.push(newJob);
-  updateJob(newJob.id, newJob); // Queue the new job for file writing
-  processJob(newJob.id); // Start processing the job asynchronously
+  updateJob(newJob.id, newJob);
+  processJob(newJob.id);
   return newJob.id;
 };
 
@@ -24,9 +24,8 @@ export const getJobById = async (id: string): Promise<IJob | undefined> => {
   return jobs.find((job) => job.id === id);
 };
 
-// Process job with delay and notify when completed
 const processJob = async (jobId: string): Promise<void> => {
-  const delay = Math.floor(Math.random() * 12) * 5000 + 5000; // Random delay between 5s and 5m
+  const delay = Math.floor(Math.random() * 12) * 5000 + 5000;
   await new Promise((resolve) => setTimeout(resolve, delay));
 
   try {
@@ -41,19 +40,16 @@ const processJob = async (jobId: string): Promise<void> => {
     });
     const imageUrl = response.data.urls.regular;
 
-    // Update job status and result upon successful completion
     const updatedJob = {
       status: JobStatus.RESOLVED,
       result: imageUrl,
     };
-    updateJob(jobId, updatedJob); // Update file safely via the queue
+    updateJob(jobId, updatedJob);
 
-    // Notify clients about job completion
     notifyJobCompletion(jobId, imageUrl);
   } catch (error) {
     console.error("Error fetching image", error);
 
-    // Update job to mark it as still pending
     updateJob(jobId, { status: JobStatus.PENDING });
   }
 };

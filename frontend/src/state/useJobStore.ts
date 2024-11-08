@@ -7,6 +7,7 @@ import { JobStatus } from "@/enums/jobstatus.enum";
 
 interface JobStoreState {
   isLoading: boolean;
+  isLoadingSingle: boolean;
   jobs: IJob[];
   wsConnected: boolean;
   reconnectAttempts: number;
@@ -14,7 +15,7 @@ interface JobStoreState {
 
   getAllJobs: () => Promise<void>;
   createJob: () => Promise<void>;
-  getJobById: (jobId: number) => Promise<IJob>;
+  getJobById: (jobId: number) => Promise<IJob | undefined>;
   updateJob: (updatedJob: IJob) => void;
   connectWebSocket: () => void;
   reconnectWebSocket: () => void;
@@ -22,6 +23,7 @@ interface JobStoreState {
 
 export const useJobStore = create<JobStoreState>((set, get) => ({
   isLoading: false,
+  isLoadingSingle: false,
   jobs: [],
   wsConnected: false,
   reconnectAttempts: 0,
@@ -44,17 +46,24 @@ export const useJobStore = create<JobStoreState>((set, get) => ({
 
   //GET BY ID
   getJobById: async (jobId: number) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL}/api/v1/jobs/${jobId}`
-    );
-    const updatedJob: IJob = response.data;
+    set({ isLoadingSingle: true });
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/jobs/${jobId}`
+      );
+      const updatedJob: IJob = response.data;
 
-    set((state) => ({
-      jobs: state.jobs.map((job) =>
-        job.id === jobId ? { ...job, ...updatedJob } : job
-      ),
-    }));
-    return response.data as IJob;
+      set((state) => ({
+        jobs: state.jobs.map((job) =>
+          job.id === jobId ? { ...job, ...updatedJob } : job
+        ),
+      }));
+      return response.data as IJob;
+    } catch {
+      toast.error("Error fetching jobs");
+    } finally {
+      set({ isLoadingSingle: false });
+    }
   },
 
   //CREATE

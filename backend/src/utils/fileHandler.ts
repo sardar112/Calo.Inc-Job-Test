@@ -3,17 +3,23 @@ import fsExt from "fs-ext";
 import path from "path";
 import { IJob } from "../interfaces/job.interface";
 
-const filePath = path.join(__dirname, "../data/jobs.json");
-let writeQueue: { jobId: string; updatedJob: Partial<IJob> }[] = []; // Queue to store job updates
+const filePath = path.join(__dirname, "./../data/jobs.json");
+let writeQueue: { jobId: string; updatedJob: Partial<IJob> }[] = [];
 let isProcessing = false;
 
 const initializeFile = () => {
+  const dirPath = path.dirname(filePath);
+
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log("Directory created:", dirPath);
+  }
+
   if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, JSON.stringify([])); // Create an empty array in the JSON file
+    fs.writeFileSync(filePath, JSON.stringify([]));
   }
 };
 
-// Locking mechanism to ensure exclusive access to the file
 const lockFile = (fd: number, lockType: "ex" | "sh") => {
   return new Promise((resolve, reject) => {
     fsExt.flock(fd, lockType, (err: any) => {
@@ -23,7 +29,6 @@ const lockFile = (fd: number, lockType: "ex" | "sh") => {
   });
 };
 
-// Unlocking the file after operations
 const unlockFile = (fd: number) => {
   return new Promise((resolve, reject) => {
     fsExt.flock(fd, "un", (err: any) => {
@@ -33,40 +38,36 @@ const unlockFile = (fd: number) => {
   });
 };
 
-// Function to read the file with a shared lock
 export const readJobsFromFile = async (): Promise<any[]> => {
   initializeFile();
-  const fd = fs.openSync(filePath, "r+"); // Open file descriptor
+  const fd = fs.openSync(filePath, "r+");
 
   let data = [];
   try {
-    await lockFile(fd, "sh"); // Acquire shared lock
+    await lockFile(fd, "sh");
     const fileData = fs.readFileSync(fd, "utf-8");
     data = JSON.parse(fileData);
   } catch (error) {
     console.error("Error reading file", error);
   } finally {
-    await unlockFile(fd); // Release lock
-    fs.closeSync(fd);
+    await unlockFile(fd);
   }
   return data;
 };
 
-// Write to file directly with an exclusive lock to ensure atomic write
 const writeJobsToFile = async (jobs: Partial<IJob>[]) => {
-  const fd = fs.openSync(filePath, "w"); // Open file for writing
+  const fd = fs.openSync(filePath, "w");
   try {
-    await lockFile(fd, "ex"); // Exclusive lock for writing
+    await lockFile(fd, "ex");
     fs.writeFileSync(fd, JSON.stringify(jobs, null, 2));
   } catch (error) {
     console.error("Error writing to file", error);
   } finally {
-    await unlockFile(fd); // Release lock
+    await unlockFile(fd);
     fs.closeSync(fd);
   }
 };
 
-// Process next write in the queue
 const processNextWrite = async () => {
   if (writeQueue.length === 0) {
     isProcessing = false;
@@ -76,7 +77,6 @@ const processNextWrite = async () => {
   isProcessing = true;
   const { jobId, updatedJob } = writeQueue.shift()!;
 
-  // Read current jobs from file, update, and write back
   try {
     const jobs = await readJobsFromFile();
     const jobIndex = jobs.findIndex((job) => job.id === jobId);
@@ -92,11 +92,10 @@ const processNextWrite = async () => {
   } catch (error) {
     console.error("Error processing write queue", error);
   } finally {
-    processNextWrite(); // Process next item in the queue
+    processNextWrite();
   }
 };
 
-// Schedule a job update in the write queue
 export const updateJob = (jobId: string, updatedJob: any): void => {
   writeQueue.push({ jobId, updatedJob });
 
@@ -105,7 +104,6 @@ export const updateJob = (jobId: string, updatedJob: any): void => {
   }
 };
 
-// Adding a job, similar to update, but for new entries
 export const addJob = (newJob: any): void => {
   writeQueue.push({ jobId: newJob.id, updatedJob: newJob });
 

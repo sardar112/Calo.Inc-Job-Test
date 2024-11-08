@@ -12,7 +12,6 @@ export function initializeWebSocket(server: http.Server) {
   });
 }
 
-// Function to notify clients of job completion
 export function notifyJobCompletion(jobId: string, result: string) {
   if (!wss) {
     console.warn("WebSocket server not initialized.");
