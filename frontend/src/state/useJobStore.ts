@@ -14,7 +14,7 @@ interface JobStoreState {
 
   getAllJobs: () => Promise<void>;
   createJob: () => Promise<void>;
-  getJobById: (jobId: number) => Promise<void>;
+  getJobById: (jobId: number) => Promise<IJob>;
   updateJob: (updatedJob: IJob) => void;
   connectWebSocket: () => void;
   reconnectWebSocket: () => void;
@@ -54,6 +54,7 @@ export const useJobStore = create<JobStoreState>((set, get) => ({
         job.id === jobId ? { ...job, ...updatedJob } : job
       ),
     }));
+    return response.data as IJob;
   },
 
   //CREATE

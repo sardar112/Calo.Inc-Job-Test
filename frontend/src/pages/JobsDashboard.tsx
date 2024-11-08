@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from "react";
 import { Loader2, RefreshCw } from "lucide-react";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 import { JobCard } from "../components/JobCard";
 import { Button } from "../components/ui/button";
 
 import { IJob } from "../interfaces/job.interface";
 import { useJobStore } from "../state/useJobStore";
-import { toast } from "react-toastify";
 
 export function JobsDashboard() {
   const { isLoading, jobs, getAllJobs, createJob, connectWebSocket } =
@@ -43,13 +44,14 @@ export function JobsDashboard() {
           <Loader2 className="h-4 w-4 animate-spin" />
         </div>
       ) : (
-        <div
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-          onClick={() => console.log("object")}
-        >
-          {jobs.map((job: IJob) => (
-            <JobCard key={job.id} job={job} />
-          ))}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {jobs.map((job: IJob) => {
+            return (
+              <Link to={`/jobs/${job.id}`}>
+                <JobCard key={job.id} job={job} />
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>
