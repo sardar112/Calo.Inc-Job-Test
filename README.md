@@ -2,6 +2,10 @@
 
 This project is a full-stack job management application built with React, Node.js, and TypeScript. The app is designed to display and manage a list of asynchronous job tasks. Each job fetches an image from Unsplash and displays it upon completion. The app has a user-friendly frontend interface where users can view the list of jobs and add new jobs. Each new job appears with a pending status and is updated with an image once processed.
 
+## Screenshots
+https://github.com/sardar112/Calo.Inc-Job-Test/
+![Home - List View](https://github.com/sardar112/Calo.Inc-Job-Test/raw/main/screenshots/list.png)
+
 # Requirements.
 
 Create a backend service with next endpoints: /jobs, /jobs/{id}.
