@@ -1,0 +1,53 @@
+/* .gradient-bg {
+  background: hsla(200, 55%, 15%, 1);
+
+  background: linear-gradient(
+    90deg,
+    hsla(200, 55%, 15%, 1) 0%,
+    hsla(190, 30%, 28%, 1) 50%,
+    hsla(210, 45%, 30%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    90deg,
+    hsla(200, 55%, 15%, 1) 0%,
+    hsla(190, 30%, 28%, 1) 50%,
+    hsla(210, 45%, 30%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    90deg,
+    hsla(200, 55%, 15%, 1) 0%,
+    hsla(190, 30%, 28%, 1) 50%,
+    hsla(210, 45%, 30%, 1) 100%
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#1C3A46", endColorstr="#345960", GradientType=1 );
+} */
+
+.gradient-bg {
+  background: rgb(84, 166, 121); /* Adjusted to match #dae5de */
+
+  background: linear-gradient(
+    90deg,
+    rgb(91, 201, 140) 0%,       
+    rgb(99, 184, 147) 50%,        
+    rgb(74, 171, 139) 100%        
+  );
+
+  background: -moz-linear-gradient(
+    90deg,
+    rgb(91, 201, 140) 0%,       
+    rgb(99, 184, 147) 50%,        
+    rgb(74, 171, 139) 100%   
+  );
+
+  background: -webkit-linear-gradient(
+    90deg,
+    rgb(91, 201, 140) 0%,       
+    rgb(99, 184, 147) 50%,        
+    rgb(74, 171, 139) 100%   
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#dae5de", endColorstr="#88a396", GradientType=1 );
+}
