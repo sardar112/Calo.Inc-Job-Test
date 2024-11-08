@@ -76,9 +76,11 @@ yarn install
 # Configure Environment Variables
 
 Create a .env file in the root of the project and add the
-VITE*WS_URL =
-VITE_API_BASE_URL =
-Make sure it should be starting with VITE*
+VITE_WS_URL = your-ws-url.
+
+VITE_API_BASE_URL =your-api-url.
+
+Make sure it should be starting with VITE.
 
 # Run Client
 

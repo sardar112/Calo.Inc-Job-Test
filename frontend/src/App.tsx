@@ -5,8 +5,8 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 
 import { AppLayout } from "./components/layouts/layout";
-import { JobsDashboard } from "./pages/JobsDashboard";
-import { JobDetails } from "./pages/JobDetails";
+import { JobsDashboard } from "./components/Organisms/JobsDashboard";
+import { JobDetails } from "./components/Organisms/JobDetails";
 
 function App() {
   return (

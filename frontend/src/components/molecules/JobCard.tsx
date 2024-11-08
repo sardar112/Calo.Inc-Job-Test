@@ -5,16 +5,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Badge } from "./ui/badge";
+} from "../atom/card";
+import { Badge } from "../atom/badge";
 import { Loader2 } from "lucide-react";
 import { JobStatus } from "@/enums/jobstatus.enum";
 
 export interface IJobCardProps {
   job: IJob;
+  isDetail: boolean;
 }
 
-export function JobCard({ job }: IJobCardProps) {
+export function JobCard({ job, isDetail }: IJobCardProps) {
   return (
     <Card key={job.id}>
       <CardHeader className="justify-self-start">
@@ -33,7 +34,9 @@ export function JobCard({ job }: IJobCardProps) {
           <img
             src={job.result}
             alt="Job result"
-            className="mt-2 w-full h-40 object-cover rounded"
+            className={`mt-2 w-full ${
+              isDetail ? "h-[30rem]" : "h-[15rem]"
+            } object-cover rounded`}
           />
         )}
       </CardContent>

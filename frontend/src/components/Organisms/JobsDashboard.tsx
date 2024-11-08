@@ -3,11 +3,11 @@ import { Loader2, RefreshCw } from "lucide-react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
-import { JobCard } from "../components/JobCard";
-import { Button } from "../components/ui/button";
+import { JobCard } from "../molecules/JobCard";
+import { Button } from "../atom/button";
 
-import { IJob } from "../interfaces/job.interface";
-import { useJobStore } from "../state/useJobStore";
+import { IJob } from "../../interfaces/job.interface";
+import { useJobStore } from "../../state/useJobStore";
 
 export function JobsDashboard() {
   const { isLoading, jobs, getAllJobs, createJob, connectWebSocket } =
@@ -48,7 +48,7 @@ export function JobsDashboard() {
           {jobs.map((job: IJob) => {
             return (
               <Link to={`/jobs/${job.id}`}>
-                <JobCard key={job.id} job={job} />
+                <JobCard key={job.id} job={job} isDetail={false} />
               </Link>
             );
           })}
